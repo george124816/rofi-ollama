@@ -15,7 +15,8 @@ zenity --progress --text="Waiting for an answer" --pulsate &
 PID=$!
 
 ANSWER=$(echo "$INPUT" | ollama run "$MODEL")
+echo "$ANSWER" > /tmp/rofi_ollama_output.txt
 
 kill $PID
 
-zenity --info --text="$ANSWER"
+zenity --text-info --title="Answer" --filename=/tmp/rofi_ollama_output.txt
