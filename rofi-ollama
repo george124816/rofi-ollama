@@ -1,0 +1,21 @@
+#!/bin/bash
+
+MODEL=$(ollama ls | awk 'NR>1 {print $1}' | rofi -dmenu -p "Ollama model")
+if [[ -z $MODEL ]]; then
+    exit 1
+fi
+
+INPUT=$(rofi -dmenu -p "")
+if [[ -z $INPUT ]]; then
+    exit 1
+fi
+
+zenity --progress --text="Waiting for an answer" --pulsate &
+
+PID=$!
+
+ANSWER=$(echo "$INPUT" | ollama run "$MODEL")
+
+kill $PID
+
+zenity --info --text="$ANSWER"
